@@ -2,12 +2,13 @@ package Model;
 
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
  * Created by e077272 on 3/12/2018.
  */
-public class Media {
+public abstract class Media implements Comparable<Media>{
 
     private Integer id;
     private String title;
@@ -82,5 +83,9 @@ public class Media {
     @Override
     public String toString() {
         return "ID: "+ this.getId() + " Title: " + this.getTitle() + " Release date: " + new SimpleDateFormat("dd/MM/yyyy").format(this.getReleaseDate());
+    }
+
+    public int compareTo(Media o) {
+        return this.getTitle().compareTo(o.getTitle());
     }
 }

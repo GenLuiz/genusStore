@@ -15,13 +15,6 @@ public class CompactDisk extends Media {
     public CompactDisk() {
     }
 
-    public CompactDisk(Integer id, String title, String genre, Date releaseDate, Date createdDate, BigDecimal price, Integer stockQuantity, String artist, Integer numberOfTracks, BigDecimal totalTime) {
-        super(id, title, genre, releaseDate, createdDate, price, stockQuantity);
-        this.artist = artist;
-        this.numberOfTracks = numberOfTracks;
-        this.totalTime = totalTime;
-    }
-
     public String getArtist() {
         return artist;
     }

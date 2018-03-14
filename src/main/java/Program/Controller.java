@@ -3,13 +3,12 @@ package Program;
 import Model.Book;
 import Model.CompactDisk;
 import Model.Game;
+import Model.Media;
+
 import java.math.BigDecimal;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 /**
  * Created by e077272 on 3/12/2018.
@@ -74,33 +73,61 @@ public class Controller {
 
     private static void listGames() {
         System.out.println(" --- Games list --- ");
-        List<Game> orderList = gameList.stream().sorted((obj1, obj2) -> obj1.getTitle().compareTo(obj2.getTitle())).collect(Collectors.toList());
-        System.out.println(orderList);
+        Collections.sort(gameList);
+        System.out.println(gameList);
     }
 
     private static void listCds() {
         System.out.println(" --- CDs list --- ");
+        Collections.sort(compactDiskList);
         System.out.println(compactDiskList);
     }
 
     private static void listBooks() {
         System.out.println(" --- Books list --- ");
+        Collections.sort(bookList);
         System.out.println(bookList);
     }
 
     private static void increaseProductMenu() {
+        System.out.println("You are in the increase a product menu," +
+                "choose what kind of media you want to increase\n");
+        showProductOptions();
+        Scanner scanner = new Scanner(System.in);
+        goToIncreaseSelectedMedia(scanner.next().toUpperCase());
+    }
+
+    private static void goToIncreaseSelectedMedia(String option) {
+        char selected = option.charAt(0);
+        switch (selected){
+            case 'B':
+                increaseBook();
+                break;
+            case 'G':
+                increaseGame();
+                break;
+            case 'C':
+                increaseCompactDisk();
+                break;
+            default:
+                System.out.println(" --- Invalid option --- ");
+        }
     }
 
     private static void addNewProductMenu() {
         System.out.flush();
         System.out.println("You are in the add a product menu," +
                 "choose what kind of media you want to add\n");
+        showProductOptions();
+        Scanner scanner = new Scanner(System.in);
+        goToAddSelectedMedia(scanner.next().toUpperCase());
+    }
+
+    private static void showProductOptions() {
         System.out.println(" - (B)ook");
         System.out.println(" - (G)ame");
         System.out.println(" - (C)D");
         System.out.println("Hit the letter then ENTER!: ");
-        Scanner scanner = new Scanner(System.in);
-        goToAddSelectedMedia(scanner.next().toUpperCase());
     }
 
     private static void goToAddSelectedMedia(String option) {

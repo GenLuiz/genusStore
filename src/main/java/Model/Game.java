@@ -15,13 +15,6 @@ public class Game extends Media {
     public Game() {
     }
 
-    public Game(Integer id, String title, String genre, Date releaseDate, Date createdDate, BigDecimal price, Integer stockQuantity, String publisher, String plataform, String rating) {
-        super(id, title, genre, releaseDate, createdDate, price, stockQuantity);
-        this.publisher = publisher;
-        this.plataform = plataform;
-        this.rating = rating;
-    }
-
     public String getPublisher() {
         return publisher;
     }
@@ -47,4 +40,5 @@ public class Game extends Media {
     public String toString() {
         return super.toString();
     }
+
 }

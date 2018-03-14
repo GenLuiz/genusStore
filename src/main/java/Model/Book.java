@@ -17,15 +17,6 @@ public class Book extends Media {
     public Book() {
     }
 
-    public Book(Integer id, String title, String genre, Date releaseDate, Date createdDate, BigDecimal price, Integer stockQuantity, String description, String author, String pressName, String edition, String city) {
-        super(id, title, genre, releaseDate, createdDate, price, stockQuantity);
-        this.description = description;
-        this.author = author;
-        this.pressName = pressName;
-        this.edition = edition;
-        this.city = city;
-    }
-
     public String getDescription() {
         return description;
     }
