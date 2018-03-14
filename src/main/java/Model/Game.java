@@ -12,9 +12,6 @@ public class Game extends Media {
     private String plataform;
     private String rating;
 
-    public Game() {
-    }
-
     public String getPublisher() {
         return publisher;
     }

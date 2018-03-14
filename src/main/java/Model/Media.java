@@ -18,19 +18,6 @@ public abstract class Media implements Comparable<Media>{
     private BigDecimal price;
     private Integer stockQuantity;
 
-    public Media() {
-    }
-
-    public Media(Integer id, String title, String genre, Date releaseDate, Date createdDate, BigDecimal price, Integer stockQuantity) {
-        this.id = id;
-        this.title = title;
-        this.genre = genre;
-        this.releaseDate = releaseDate;
-        this.createdDate = createdDate;
-        this.price = price;
-        this.stockQuantity = stockQuantity;
-    }
-
     public Integer getId() {
         return id;
     }

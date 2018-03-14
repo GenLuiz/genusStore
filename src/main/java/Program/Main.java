@@ -1,7 +1,7 @@
 package Program;
 
-import static Program.Controller.goToSelectedMenu;
-import static Program.Controller.showMainMenu;
+import static Controller.Controller.goToSelectedMenu;
+import static Controller.Controller.showMainMenu;
 
 /**
  * Created by e077272 on 3/12/2018.

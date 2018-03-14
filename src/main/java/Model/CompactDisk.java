@@ -12,9 +12,6 @@ public class CompactDisk extends Media {
     private Integer numberOfTracks;
     private BigDecimal totalTime;
 
-    public CompactDisk() {
-    }
-
     public String getArtist() {
         return artist;
     }

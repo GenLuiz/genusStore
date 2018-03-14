@@ -14,9 +14,6 @@ public class Book extends Media {
     private String edition;
     private String city;
 
-    public Book() {
-    }
-
     public String getDescription() {
         return description;
     }
