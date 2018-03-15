@@ -1,7 +1,9 @@
 package DAO;
 
 import Model.Game;
+import MyException.StockNotAvailableException;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class GameDAO {
 
-    protected static AtomicInteger atomicInteger = new AtomicInteger();
+    private static AtomicInteger atomicInteger = new AtomicInteger();
 
     public static Game addNewGame(){
         Game newGame = new Game();
@@ -58,8 +60,11 @@ public class GameDAO {
             Integer quantity = new Integer(scanner.next());
             newGame.setStockQuantity(quantity);
             return newGame;
+        }catch (IllegalArgumentException ex){
+            System.out.println("Please insert the correct format");
+            return null;
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("unexpected error occur contact the adm");
             return null;
         }
     }
@@ -68,6 +73,25 @@ public class GameDAO {
         for(Game game: gameList){
             if(game.getId().equals(id))
                 game.setStockQuantity(game.getStockQuantity()+quantity);
+        }
+    }
+
+    public static void listGames(List<Game> gameList) {
+        Collections.sort(gameList);
+        System.out.println(" --- Games list --- ");
+        for (Game game: gameList) {
+            System.out.println(game);
+        }
+    }
+
+    public static void lowerStockQuantity(Integer id, Integer quantity, List<Game> gameList)throws StockNotAvailableException {
+        for (Game game:gameList) {
+            if(game.getId().equals(id)){
+                if(game.getStockQuantity() < quantity)
+                    throw new StockNotAvailableException();
+                else
+                    game.setStockQuantity(game.getStockQuantity() - quantity);
+            }
         }
     }
 }

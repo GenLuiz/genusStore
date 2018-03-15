@@ -1,7 +1,9 @@
 package DAO;
 
 import Model.CompactDisk;
+import MyException.StockNotAvailableException;
 import java.math.BigDecimal;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
@@ -12,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CompactDiskDAO {
 
-    protected static AtomicInteger atomicInteger = new AtomicInteger();
+    private static AtomicInteger atomicInteger = new AtomicInteger();
 
     public static CompactDisk addNewCompactDisk(){
         CompactDisk newCd = new CompactDisk();
@@ -60,8 +62,11 @@ public class CompactDiskDAO {
             Integer quantity = new Integer(scanner.next());
             newCd.setStockQuantity(quantity);
             return newCd;
+        }catch (IllegalArgumentException ex){
+            System.out.println("Please insert the correct format");
+            return null;
         }catch (Exception ex){
-            System.out.println(ex.getMessage());
+            System.out.println("unexpected error occur contact the adm");
             return null;
         }
     }
@@ -69,7 +74,26 @@ public class CompactDiskDAO {
     public static void increaseStockQuantity(Integer id, Integer quantity, List<CompactDisk> compactDiskList) {
         for (CompactDisk disk: compactDiskList){
             if(disk.getId().equals(id))
-                disk.setStockQuantity(disk.getStockQuantity()+ quantity);
+                disk.setStockQuantity(disk.getStockQuantity()+quantity);
+        }
+    }
+
+    public static void listCds(List<CompactDisk> compactDiskList) {
+        Collections.sort(compactDiskList);
+        System.out.println(" --- CDs list --- ");
+        for (CompactDisk disk: compactDiskList) {
+            System.out.println(disk);
+        }
+    }
+
+    public static void lowerStockQuantity(Integer id, Integer quantity, List<CompactDisk> compactDiskList) throws StockNotAvailableException {
+        for (CompactDisk compactDisk:compactDiskList) {
+            if(compactDisk.getId().equals(id)){
+                if(compactDisk.getStockQuantity() < quantity)
+                    throw new StockNotAvailableException();
+                else
+                    compactDisk.setStockQuantity(compactDisk.getStockQuantity() - quantity);
+            }
         }
     }
 }

@@ -11,9 +11,9 @@ public class Main {
     public static void main(String[] args) {
         boolean using = true;
         do {
-            String option = showMainMenu();
-            if(!option.equalsIgnoreCase("e"))
-                goToSelectedMenu(option.toUpperCase());
+            String option = showMainMenu().toUpperCase();
+            if(!option.equals("E"))
+                goToSelectedMenu(option);
             else
                 using = false;
         }while(using);
