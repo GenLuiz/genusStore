@@ -69,7 +69,12 @@ public abstract class Media implements Comparable<Media>{
 
     @Override
     public String toString() {
-        return "ID: "+ this.getId() + " Title: " + this.getTitle() + " Release date: " + new SimpleDateFormat("dd/MM/yyyy").format(this.getReleaseDate());
+        return "ID: "+ this.getId() +
+                " Title: " + this.getTitle() +
+                " Price: " +this.getPrice()+
+                " Quantity in Stock: "+ this.getStockQuantity()+
+                " Release date: " + new SimpleDateFormat("dd/MM/yyyy").format(this.getReleaseDate())+
+                " Created date: " + new SimpleDateFormat("dd/MM/yyyy").format(this.getCreatedDate());
     }
 
     public int compareTo(Media o) {

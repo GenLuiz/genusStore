@@ -6,25 +6,23 @@ import DAO.GameDAO;
 import Model.Book;
 import Model.CompactDisk;
 import Model.Game;
+import MyException.StockNotAvailableException;
 
-import java.math.BigDecimal;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by e077272 on 3/12/2018.
  */
 public class Controller {
 
-    protected static List<Book> bookList = new ArrayList<Book>();
-    protected static List<CompactDisk> compactDiskList = new ArrayList<CompactDisk>();
-    protected static List<Game> gameList = new ArrayList<Game>();
+    private static List<Book> bookList = new ArrayList<Book>();
+    private static List<CompactDisk> compactDiskList = new ArrayList<CompactDisk>();
+    private static List<Game> gameList = new ArrayList<Game>();
 
     public static String showMainMenu(){
         System.out.println("Hello, welcome to Genus Store which operation you would like to do?\n");
         System.out.println(" - (A)dd new product");
         System.out.println(" - (I)ncrease same product");
-        System.out.println(" - (R)emove product");
         System.out.println(" - (S)ell product");
         System.out.println(" - List (G)ames");
         System.out.println(" - List (B)ooks");
@@ -52,9 +50,6 @@ public class Controller {
             case 'I':
                 increaseProductMenu();
                 break;
-            case 'R':
-                removeProductMenu();
-                break;
             case 'S':
                 sellProductMenu();
                 break;
@@ -64,28 +59,16 @@ public class Controller {
         }
     }
 
-    private static void sellProductMenu() {
-    }
-
-    private static void removeProductMenu() {
-    }
-
     private static void listGames() {
-        System.out.println(" --- Games list --- ");
-        Collections.sort(gameList);
-        System.out.println(gameList);
+        GameDAO.listGames(gameList);
     }
 
     private static void listCds() {
-        System.out.println(" --- CDs list --- ");
-        Collections.sort(compactDiskList);
-        System.out.println(compactDiskList);
+        CompactDiskDAO.listCds(compactDiskList);
     }
 
     private static void listBooks() {
-        System.out.println(" --- Books list --- ");
-        Collections.sort(bookList);
-        System.out.println(bookList);
+        BookDAO.listBooks(bookList);
     }
 
     private static void increaseProductMenu() {
@@ -111,6 +94,45 @@ public class Controller {
             default:
                 System.out.println(" --- Invalid option --- ");
         }
+    }
+
+    private static void increaseCompactDisk() {
+        System.out.println("Choose which CD (by id) you want to add:");
+        listCds();
+        Integer id = insertId();
+        Integer quantity = insertQuantity(false);
+        CompactDiskDAO.increaseStockQuantity(id, quantity, compactDiskList);
+    }
+
+    private static void increaseGame() {
+        System.out.println("Choose which Game (by id) you want to add:");
+        listGames();
+        Integer id = insertId();
+        Integer quantity = insertQuantity(false);
+        GameDAO.increaseStockQuantity(id, quantity, gameList);
+    }
+
+    private static void increaseBook() {
+        System.out.println("Choose which Book (by id) you want to add:");
+        listBooks();
+        Integer id = insertId();
+        Integer quantity = insertQuantity(false);
+        BookDAO.increaseStockQuantity(id,quantity, bookList);
+    }
+
+    private static Integer insertQuantity(Boolean isSelling) {
+        if(isSelling)
+            System.out.println("Now type how much you are selling:");
+        else
+            System.out.println("Now type how much itens are entering in stock:");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
+    }
+
+    private static Integer insertId() {
+        System.out.println("Type the Id number then ENTER!: ");
+        Scanner scanner = new Scanner(System.in);
+        return scanner.nextInt();
     }
 
     private static void addNewProductMenu() {
@@ -161,39 +183,64 @@ public class Controller {
        bookList.add(newBook);
     }
 
-    private static void increaseCompactDisk() {
-        System.out.println("Choose which CD (by id) you want to add:");
+    private static void sellProductMenu() {
+        System.out.println("You are in the sell a product menu," +
+                "choose what kind of media you want to sell\n");
+        showProductOptions();
+        Scanner scanner = new Scanner(System.in);
+        goToSellSelectedMedia(scanner.next().toUpperCase());
+    }
+
+    private static void goToSellSelectedMedia(String option) {
+        char selected = option.charAt(0);
+        switch (selected){
+            case 'B':
+                sellBook();
+                break;
+            case 'G':
+                sellGame();
+                break;
+            case 'C':
+                sellCompactDisk();
+                break;
+            default:
+                System.out.println(" --- Invalid option --- ");
+    }
+}
+
+    private static void sellCompactDisk() {
+        System.out.println("Choose which CD (by id) you want to sell:");
         listCds();
-        System.out.println("Type the Id number then ENTER!: ");
-        Scanner scanner = new Scanner(System.in);
-        Integer id = scanner.nextInt();
-        System.out.println("Now type how much itens are entering in stock:");
-        scanner = new Scanner(System.in);
-        Integer quantity = scanner.nextInt();
-        CompactDiskDAO.increaseStockQuantity(id, quantity, compactDiskList);
+        Integer id = insertId();
+        Integer quantity = insertQuantity(true);
+        try {
+            CompactDiskDAO.lowerStockQuantity(id, quantity, compactDiskList);
+        }catch (StockNotAvailableException ex){
+            System.out.println(ex);
+        }
     }
 
-    private static void increaseGame() {
-        System.out.println("Choose which Game (by id) you want to add:");
+    private static void sellGame() {
+        System.out.println("Choose which Game (by id) you want to sell:");
         listGames();
-        System.out.println("Type the Id number then ENTER!: ");
-        Scanner scanner = new Scanner(System.in);
-        Integer id = scanner.nextInt();
-        System.out.println("Now type how much itens are entering in stock:");
-        scanner = new Scanner(System.in);
-        Integer quantity = scanner.nextInt();
-        GameDAO.increaseStockQuantity(id, quantity, gameList);
+        Integer id = insertId();
+        Integer quantity = insertQuantity(true);
+        try {
+            GameDAO.lowerStockQuantity(id, quantity, gameList);
+        }catch (StockNotAvailableException ex){
+            System.out.println(ex);
+        }
     }
 
-    private static void increaseBook() {
-        System.out.println("Choose which Book (by id) you want to add:");
+    private static void sellBook() {
+        System.out.println("Choose which book (by id) you want to sell:");
         listBooks();
-        System.out.println("Type the Id number then ENTER!: ");
-        Scanner scanner = new Scanner(System.in);
-        Integer id = scanner.nextInt();
-        System.out.println("Now type how much itens are entering in stock:");
-        scanner = new Scanner(System.in);
-        Integer quantity = scanner.nextInt();
-        BookDAO.increaseStockQuantity(id,quantity, bookList);
+        Integer id = insertId();
+        Integer quantity = insertQuantity(true);
+        try {
+            BookDAO.lowerStockQuantity(id, quantity, bookList);
+        } catch (StockNotAvailableException ex){
+            System.out.println(ex);
+        }
     }
 }
